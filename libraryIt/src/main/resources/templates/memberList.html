@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>LibraryIt</title>
+
+  <!-- Font Awesome Icons -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic' rel='stylesheet' type='text/css'>
+
+  <!-- Plugin CSS -->
+  <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
+  <!-- Theme CSS - Includes Bootstrap -->
+  <link href="css/creative.min.css" rel="stylesheet">
+
+    <!-- Search bar -->
+        <!-- If search bar logo is clicked, it redirects user to home page -->
+        
+
+</head>
+<body>
+    <div th:replace="common/head.html"></div>
+    <form method="GET" action="/memberSearch">
+        <input id="username" name="username" type="text" placeholder="Search for a member..."
+            style="width: 40%; margin-top: -50; margin-left: 20;" />
+            <button class="btn btn-primary" style="background-color: red;">Search</button>
+      </form>
+
+    <table class="table table-hover table-fixed">
+            <thead>
+                <tr>
+                    <th>User</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                <span th:if="${user.getRole()=='member'}">
+                    <td th:text="${user.getUserName()}"></td>
+                    <td><a class="btn btn-primary" style="background-color: red;" th:href="@{/membersLoans(id=${user.getId()})}">Edit</a></td>
+                </span>
+                </tr>
+            </tbody>
+</body>

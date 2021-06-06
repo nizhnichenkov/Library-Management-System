@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+<head class="navbar navbar-expand-lg header" style="margin-bottom: -20px;">
+    <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/common.css"/>
+    <title>Welcome to the Library</title>
+
+    <!-- Search bar -->
+    <div style="background-color:rgb(107, 73, 67);">
+
+        <!-- If search bar logo is clicked, it redirects user to home page -->
+        <a href="/">
+            <img src="images/library_logo.png" href="/" alt=""
+                style="width: 75px;height: 75px;">
+        </a>
+
+        <input id="username" type="text" placeholder="Search for an item"
+            style="width: 65%; margin-top: -0; margin-left: 25;" />
+
+            <a class="btn btn-primary" style="background-color: red;"
+                href="/logout">Logout</a>
+ </div>
+</head>
+<body>
+
+    <span th:if="${user2==null}">
+        <h1 style="text-align: center;">Current Loans for <span th:text="${user.getUserName()}"></span></h1>
+    </span>
+
+    <span th:if="${user2!=null}">
+        <h1 style="text-align: center;">Current Loans for <span th:text="${user2.getUserName()}"></span></h1>
+    </span>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 align-self-center">
+                <table class="table table-hover table-fixed">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Due Back</th>
+                            <th>Action</th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item: ${items}">
+                                <td th:text="${item.title}"></td>
+                                <td th:text="${item.type}"></td>
+                                <td th:text="${#dates.format(item.dateDue, 'dd-MMM-YYYY')}"></td>
+                                <td th:if="${item.reserved!=true} and ${user2==null} and ${user.getRole()=='member'}"><a th:href="@{/itemReturn(id=${item.id})}">Return</a></td></span>
+                                <td th:if="${item.reserved!=true} and ${user2==null} and ${user.getRole()=='member'}"><a th:href="@{/renewLoan(id=${item.id})}">Renew loan</a></td></span>
+                                <td th:if="${item.getDateReservedFrom()==null} and ${user2!=null}"><a th:href="@{/renewAsLib(id=${item.id})}">Renew loan</a></td></span>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <span th:if="${user2==null}">
+                    <h1 style="text-align: center;">Current Reservations for <span th:text="${user.getUserName()}"></span></h1>
+                </span>
+            
+                <span th:if="${user2!=null}">
+                    <h1 style="text-align: center;">Current Reservations for <span th:text="${user2.getUserName()}"></span></h1>
+                </span>
+
+                    <table class="table table-hover table-fixed">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Reserved From</th>
+                                <th>Reserved Until</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="reservation: ${reservations}">
+                                    <td th:text="${reservation.title}"></td>
+                                    <td th:text="${reservation.type}"></td>
+                                    <td th:text="${#dates.format(reservation.dateReservedFrom, 'dd-MMM-YYYY')}"></td>
+                                    <td th:text="${#dates.format(reservation.dateReservedUntil, 'dd-MMM-YYYY')}"></td>
+                                    <td><a th:href="@{/cancelReservation(id=${reservation.id})}">Cancel Reservation</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                        
+                    <span th:if="${user2==null}">
+                        <h1 style="text-align: center;">History for <span th:text="${user.getUserName()}"></span></h1>
+                    </span>
+                
+                    <span th:if="${user2!=null}">
+                        <h1 style="text-align: center;">Current History for <span th:text="${user2.getUserName()}"></span></h1>
+                    </span>
+
+                    <table class="table table-hover table-fixed">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Date Loaned</th>
+                                <th>Date Returned</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="history: ${history}">
+                                    <td th:text="${history.itemTitle}"></td>
+                                    <td th:text="${history.itemType}"></td>
+                                    <td th:text="${#dates.format(history.loanedOn, 'dd-MMM-YYYY')}"></td>
+                                    <td th:text="${#dates.format(history.returnedOn, 'dd-MMM-YYYY')}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>        
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Library Register</title>
+  <link rel="stylesheet" href="css/loginPageStyle.css" />
+
+
+
+  <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="css/common.css">
+  <title>Welcome to the Library</title>
+</head>
+<style>
+  body {
+    background-image: url('img/bg-masthead.jpg');
+    background-color: rgba(107, 75, 66, 0.932);
+    background-blend-mode: lighten;
+  }
+  </style>
+<body>
+
+  <div th:replace="common/head.html"></div>
+  <!-- Add user login panel -->
+  <div class="loginpanel" align="center">
+    <form method="POST" action="/register">
+      <h1>My Library</h1>
+      <img src="images/library_logo.png" alt=""
+        style="width: 180px;height: 150px;">
+
+      <div class="txt">
+        <input id="username" type="text" name="username"
+          placeholder="Username" />
+        <label for="user" class="entypo-user"></label>
+      </div>
+
+      <div class="txt">
+        <input id="password" type="password" name="password"
+          placeholder="Password" />
+        <label for="password" class="entypo-lock"></label>
+      </div>
+
+      <div class="txt">
+        <input id="passwordDuplicate" type="password" name="passwordDuplicate"
+          placeholder="Confirm password" />
+        <label for="password" class="entypo-lock"></label>
+      </div>
+
+      <div class="buttons">
+        <input type="submit" value="Register" />
+      </div>
+
+      <div class="container">
+        <span th:if="error != null">
+          <div class="row">
+            <p style="color:red;font-weight:bold;" th:text="${error}"></p>
+          </div>
+        </span>
+      </div>
+
+    </form>
+  </div>
+
+
+  <div th:replace="common/footer.html"></div>
+</body>
+
+</html>

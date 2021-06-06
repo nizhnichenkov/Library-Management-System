@@ -1,0 +1,31 @@
+<head class="navbar navbar-expand-lg header" style="margin-bottom:25px">
+
+    <!-- Search bar -->
+    <div class="row "style="background-color:rgb(107, 73, 67);">
+
+        <!-- If search bar logo is clicked, it redirects user to home page -->
+        <a href="/">
+            <img src="images/library_logo.png" href="/" alt=""
+                style="width: 75px;height: 75px; margin-left: 25;">
+        </a>
+        <form method="GET" action="/itemSearch">
+            <input id="title" name="title" type="text" placeholder="Search for an item" on
+                style="width: 70%; margin-left: 40;" />
+            <button class="btn btn-primary">Search</button>
+        </form>
+        <!-- <span th:if="${user == null}">
+            <a style="background-color: rgb(223, 66, 26);" class="btn btn-primary" href="/login">Login</a> 
+        </span> -->
+
+        <span th:if="${user != null}">
+            <a class="btn btn-primary" style="background-color: red;"
+                href="/logout">Logout</a>
+            <span>Logged in as </span>
+            <span th:text="${user.getUserName()}"></span>
+        </span>
+
+
+    </div>
+
+
+</head>

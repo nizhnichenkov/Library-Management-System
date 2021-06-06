@@ -1,0 +1,22 @@
+version: '3'
+services: 
+    db:
+        image: mysql
+        ports: 
+            - 3306:3306
+        environment: 
+            MYSQL_ROOT_PASSWORD: mypassword
+            MYSQL_DATABASE: library
+            MYSQL_USER: root
+            
+
+    web:
+        build: .
+        depends_on:
+            - db
+        environment: 
+            HOSTNAME: db
+        ports:
+        - 8080:8080
+
+

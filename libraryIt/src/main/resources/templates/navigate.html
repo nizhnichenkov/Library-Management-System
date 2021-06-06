@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+
+<head class="navbar navbar-expand-lg header" style="margin-bottom: -20px;">
+    <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+        crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/common.css"/>
+    <title>Welcome to the Library</title>
+
+    <!-- Search bar -->
+    <div class="row "style="background-color:rgb(107, 73, 67);">
+
+        <!-- If search bar logo is clicked, it redirects user to home page -->
+        <a href="/">
+            <img src="images/library_logo.png" href="/" alt=""
+                style="width: 75px;height: 75px; margin-left: 25;">
+        </a>
+
+        <form method="GET" action="/itemSearch">
+            <input id="title" name="title" type="text" placeholder="Search for an item" on
+                style="width: 70%; margin-left: 40;" />
+            <button class="btn btn-primary">Search</button>
+        </form>
+
+        <span th:if="${user == null}">
+            <a style="background-color: rgb(223, 66, 26);" class="btn btn-primary" href="/login">Login</a> 
+        </span>
+
+        <span th:if="${user != null}">
+            <a class="btn btn-primary" style="background-color: red;"
+                href="/logout">Logout</a>
+                <span th:if="${user.getRole()=='librarian'}">
+                    <a class="btn btn-primary" style="background-color: red;"
+                        href="/editMembers">Edit Members</a>
+                    <a class="btn btn-primary" style="background-color: red;"
+                        href="/editProfile">Edit Profile</a>
+                </span>
+        </span>
+    </span>
+    </div>
+</head>
+
+<body>
+    <!-- <div th:replace="common/head.html"></div> -->
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg">
+                <span th:if="${user!=null}">
+                <span th:if="${user.getRole()=='librarian'}">
+                    <form method="GET" action="/addItem">
+                        <div><input id="title" name="title" type="text" placeholder="Item name"></div>
+                        <div><input id="type" name="type" type="text" placeholder="Media type"></div>
+                        <div><input id="genre" name="genre" type="text" placeholder="Genre"></div>
+
+                        <div class="buttons">
+                                <input type="submit" value="Add Item" />
+                            </div>                                       
+                    </form>                           
+                </span>
+            </span>
+                <h2>Items Available</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 align-self-center">
+                
+                <table class="table table-hover table-fixed">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Available</th>
+                            <th>Due Back</th>
+                            <span th:if="${user != null}">
+                                <span th:if="${user.getRole()=='member'}">
+                                    <th>Action</th>
+                                </span>
+                                <span th:if="${user.getRole()=='librarian'}">
+                                    <th>Delete</th>
+                                    <th>Booked by member</th>
+                                    <th>Reserve For</th>
+                                </span>
+                            </span>
+                    </thead>
+                    <tbody>
+                        
+                        <tr th:each="item: ${items}">
+                            <td th:text="${item.title}"></td>
+                            <td th:text="${item.type}"></td>
+                            <span th:if="${item.onLoan==true}"><td>No</td></span>
+                            <span th:if="${item.onLoan==false}"><td>Yes</td></span>
+
+                            <span th:if="${item.onLoan==false}"><td>N/A</td></span>
+                            
+                            <span th:if="${item.onLoan==true}">
+                                <td th:text="${#dates.format(item.dateDue, 'dd-MMM-YYYY')}"></td>
+                            </span>
+
+                            <span th:if="${user != null} and ${item.onLoan} and ${user.getRole()=='member' and item.reserved!=true}">
+                                <td><a th:href="@{/reserve(id=${item.id})}">Reserve</a></td></span>
+                            <span th:if="${user != null} and ${item.onLoan} and ${user.getRole()=='member' and item.reserved==true}">
+                                <td>Already Reserved</td></span>
+                            <span th:if="${user != null} and !(${item.onLoan}) and ${user.getRole()=='member'}">
+                                <td><a th:href="@{/loan(id=${item.id})}">Loan Item</a></td></span>
+
+
+                            <span th:if="${user != null}">
+                                <span th:if="${user.getRole()=='librarian'}">
+                                    <span th:if="!(${item.onLoan})">
+                                        <td><a th:href="@{/deleteItem(id=${item.id})}">Delete</a></td>
+                                    </span>
+                                    <span th:if="${item.onLoan}">
+                                        <td>Can't delete</td>
+                                    </span>
+
+                                    <span th:if="!(${item.onLoan})">
+                                        <td>N/A</td>
+                                    </span>
+                                    <span th:if="${item.onLoan}">
+                                        <td th:text="${item.getUser().getUserName()}"></td>
+                                    </span>
+
+                                </span>
+                            </span>
+
+                            <!--Space for reserve item by librarian-->
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    <div th:replace="common/footer.html"></div>
+</body>
+
+</html>
